@@ -51,26 +51,37 @@
 
             mediaCard.appendChild(mediaElement);
 
+            // Campo de link de promotor
             const inputLink = document.createElement('input');
             inputLink.type = 'text';
             inputLink.placeholder = 'Coloque seu link de promotor aqui';
             inputLink.className = 'border p-2 rounded w-full mb-2';
             mediaCard.appendChild(inputLink);
 
+            // Botão compartilhar no WhatsApp
             const shareBtn = document.createElement('button');
             shareBtn.textContent = 'Compartilhar no WhatsApp';
-            shareBtn.className = 'bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700 transition w-full';
+            shareBtn.className = 'bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700 transition w-full mb-2';
             shareBtn.addEventListener('click', () => {
               const link = inputLink.value.trim();
               if (!link) {
                 alert('Por favor, coloque seu link de promotor!');
                 return;
               }
-              const shareText = `Confira esta mídia: ${fileUrl}\nMeu link de promotor: ${link}`;
+              // WhatsApp aceita URL de mídia, e ela será visualizável no chat
+              const shareText = `Confira esta mídia:\n${fileUrl}\nMeu link de promotor: ${link}`;
               const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
               window.open(whatsappUrl, '_blank');
             });
             mediaCard.appendChild(shareBtn);
+
+            // Botão de download
+            const downloadBtn = document.createElement('a');
+            downloadBtn.href = fileUrl;
+            downloadBtn.download = file.name;
+            downloadBtn.textContent = 'Baixar Mídia';
+            downloadBtn.className = 'bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700 transition w-full text-center';
+            mediaCard.appendChild(downloadBtn);
 
             mediaGallery.appendChild(mediaCard);
           }
