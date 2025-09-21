@@ -10,10 +10,10 @@
   <title>Preview da Mídia</title>
 
   <script>
-    // Pega parâmetros da URL
     const urlParams = new URLSearchParams(window.location.search);
     const file = urlParams.get('file');
     const link = urlParams.get('link');
+    const fileExt = file.split('.').pop().toLowerCase();
 
     const ogDesc = `Compartilhe com meu link de promotor: ${link}`;
     document.querySelector('meta[property="og:description"]').setAttribute('content', ogDesc);
