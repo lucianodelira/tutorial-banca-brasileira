@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Armazenamento de Mídia com Link de Promotor</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 font-sans">
+
+  <!-- HEADER -->
+  <header class="bg-green-600 text-white py-6 text-center shadow-md">
+    <h1 class="text-2xl sm:text-3xl font-bold">Armazenamento de Imagens e Vídeos</h1>
+    <p class="text-sm sm:text-base mt-1">Adicione suas mídias e compartilhe com seu link de promotor</p>
+  </header>
+
+  <!-- ADICIONAR MÍDIA -->
+  <section class="container mx-auto px-4 py-8">
+    <div class="flex flex-col sm:flex-row gap-4 items-center justify-center mb-6">
+      <input type="file" id="mediaInput" accept="image/*,video/*" class="border p-2 rounded w-full sm:w-auto">
+      <button id="addMediaBtn" class="bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700 transition">Adicionar Mídia</button>
+    </div>
+
+    <!-- GALERIA DE MÍDIAS -->
+    <div id="mediaGallery" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <!-- Mídias serão adicionadas aqui -->
+    </div>
+  </section>
+
+  <script>
+    const mediaInput = document.getElementById('mediaInput');
+    const addMediaBtn = document.getElementById('addMediaBtn');
+    const mediaGallery = document.getElementById('mediaGallery');
+
+    addMediaBtn.addEventListener('click', () => {
+      const file = mediaInput.files[0];
+      if (!file) {
+        alert("Selecione uma imagem ou vídeo primeiro!");
+        return;
+      }
+
+      const url = URL.createObjectURL(file);
+
+      // Criar o card da mídia
+      const mediaCard = document.createElement('div');
+      mediaCard.className = "bg-white p-4 rounded-2xl shadow-lg flex flex-col items-center";
+
+      // Verifica se é imagem ou vídeo
+      if (file.type.startsWith('image/')) {
+        const img = document.createElement('img');
+        img.src = url;
+        img.alt = "Imagem";
+        img.className = "rounded-lg max-w-full mb-4";
+        mediaCard.appendChild(img);
+      } else if (file.type.startsWith('video/')) {
+        const video = document.createElement('video');
+        video.src = url;
+        video.controls = true;
+        video.className = "rounded-lg max-w-full mb-4";
+        mediaCard.appendChild(video);
+      }
+
+      // Campo de texto do link de promotor
+      const inputLink = document.createElement('input');
+      inputLink.type = 'text';
+      inputLink.placeholder = 'Coloque seu link de promotor aqui';
+      inputLink.className = "border p-2 rounded w-full mb-2";
+      mediaCard.appendChild(inputLink);
+
+      // Botão compartilhar no WhatsApp
+      const shareBtn = document.createElement('button');
+      shareBtn.textContent = "Compartilhar no WhatsApp";
+      shareBtn.className = "bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700 transition w-full";
+      shareBtn.addEventListener('click', () => {
+        const link = inputLink.value.trim();
+        if (!link) {
+          alert("Por favor, coloque seu link de promotor!");
+          return;
+        }
+
+        let shareText = `Confira esta mídia: `;
+        if (file.type.startsWith('image/')) {
+          shareText += `[Imagem] `;
+        } else {
+          shareText += `[Vídeo] `;
+        }
+        shareText += `com meu link de promotor: ${link}`;
+
+        // Abre WhatsApp Web ou App com a mensagem
+        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+        window.open(whatsappUrl, '_blank');
+      });
+      mediaCard.appendChild(shareBtn);
+
+      // Adiciona à galeria
+      mediaGallery.appendChild(mediaCard);
+
+      // Limpa o input de arquivo
+      mediaInput.value = '';
+    });
+  </script>
+
+</body>
+</html>
