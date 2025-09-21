@@ -22,7 +22,7 @@
   <script>
     const mediaGallery = document.getElementById('mediaGallery');
 
-    // Lista de mídias (adicione todas as suas mídias aqui)
+    // Lista de arquivos que estarão na pasta afiliado/
     const mediaFiles = [
       "link.png",
       "video.mp4"
@@ -57,19 +57,21 @@
       const btnContainer = document.createElement('div');
       btnContainer.className = "flex gap-2 w-full";
 
+      // Botão compartilhar
       const shareBtn = document.createElement('button');
       shareBtn.textContent = "Compartilhar no WhatsApp";
       shareBtn.className = 'bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700 transition flex-1';
       shareBtn.addEventListener('click', () => {
-        const link = encodeURIComponent(inputLink.value.trim());
+        const link = inputLink.value.trim();
         if (!link) { alert('Coloque seu link de promotor!'); return; }
 
-        // Página de preview
-        const previewPage = `${window.location.origin}/preview.html?file=${fileName}&link=${link}`;
-        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(previewPage)}`;
+        const previewPage = `${window.location.origin}/preview.html?file=${fileName}`;
+        const message = `Confira esta mídia: ${previewPage}\n\nMeu link de promotor: ${link}`;
+        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
         window.open(whatsappUrl, '_blank');
       });
 
+      // Botão download
       const downloadBtn = document.createElement('a');
       downloadBtn.textContent = "Baixar";
       downloadBtn.href = fileUrl;
