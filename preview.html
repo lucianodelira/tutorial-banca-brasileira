@@ -2,18 +2,54 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Preview Afiliado</title>
-</head>
-<body>
-  <h2>Pré-visualização</h2>
-  <p id="info"></p>
-  <img id="imagem" src="" alt="preview" width="300">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Confira esta mídia!">
+  <meta property="og:description" content="">
+  <meta property="og:image" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preview da Mídia</title>
+
   <script>
     const urlParams = new URLSearchParams(window.location.search);
-    const file = urlParams.get("file") || "link.png";
-    const link = urlParams.get("link") || "https://app.bancabrasileira.com.br";
-    document.getElementById("imagem").src = "imagens/" + file;
-    document.getElementById("info").innerHTML = `Promotor: <a href="${link}" target="_blank">${link}</a>`;
+    const file = urlParams.get('file');
+    const link = urlParams.get('link');
+    const fileExt = file.split('.').pop().toLowerCase();
+
+    const ogDesc = `Compartilhe com meu link de promotor: ${link}`;
+    document.querySelector('meta[property="og:description"]').setAttribute('content', ogDesc);
+    document.querySelector('meta[property="og:image"]').setAttribute('content', `${window.location.origin}/afiliado/${file}`);
+  </script>
+</head>
+<body style="text-align:center;padding:50px;font-family:sans-serif;">
+  <h1>Confira esta mídia!</h1>
+  <p>Compartilhe com seu link de promotor: <a id="promoLink" href="#" target="_blank"></a></p>
+  <div style="margin-top:20px;">
+    <img id="mediaImg" src="" alt="Mídia" style="max-width:90%;">
+    <video id="mediaVideo" controls style="max-width:90%;display:none;"></video>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const file = urlParams.get('file');
+    const link = urlParams.get('link');
+    const fileExt = file.split('.').pop().toLowerCase();
+
+    const img = document.getElementById('mediaImg');
+    const video = document.getElementById('mediaVideo');
+    const promoLink = document.getElementById('promoLink');
+
+    promoLink.href = link;
+    promoLink.textContent = link;
+
+    if (['mp4'].includes(fileExt)) {
+      img.style.display = 'none';
+      video.src = `/afiliado/${file}`;
+      video.style.display = 'block';
+    } else {
+      img.src = `/afiliado/${file}`;
+      img.style.display = 'block';
+      video.style.display = 'none';
+    }
   </script>
 </body>
 </html>
