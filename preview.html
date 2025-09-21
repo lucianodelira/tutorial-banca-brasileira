@@ -4,51 +4,38 @@
   <meta charset="UTF-8">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Confira esta mídia!">
-  <meta property="og:description" content="">
-  <meta property="og:image" content="">
+  <meta property="og:description" content="Compartilhe esta mídia com seu link de promotor.">
+  <meta property="og:image" content="" id="ogImage">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Preview da Mídia</title>
-
-  <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const file = urlParams.get('file');
-    const link = urlParams.get('link');
-    const fileExt = file.split('.').pop().toLowerCase();
-
-    const ogDesc = `Compartilhe com meu link de promotor: ${link}`;
-    document.querySelector('meta[property="og:description"]').setAttribute('content', ogDesc);
-    document.querySelector('meta[property="og:image"]').setAttribute('content', `${window.location.origin}/afiliado/${file}`);
-  </script>
 </head>
 <body style="text-align:center;padding:50px;font-family:sans-serif;">
   <h1>Confira esta mídia!</h1>
-  <p>Compartilhe com seu link de promotor: <a id="promoLink" href="#" target="_blank"></a></p>
   <div style="margin-top:20px;">
-    <img id="mediaImg" src="" alt="Mídia" style="max-width:90%;">
+    <img id="mediaImg" src="" alt="Mídia" style="max-width:90%;display:none;">
     <video id="mediaVideo" controls style="max-width:90%;display:none;"></video>
   </div>
 
   <script>
     const urlParams = new URLSearchParams(window.location.search);
     const file = urlParams.get('file');
-    const link = urlParams.get('link');
+    if (!file) { document.body.innerHTML = "<p>Arquivo não encontrado.</p>"; }
+
     const fileExt = file.split('.').pop().toLowerCase();
+    const mediaUrl = `${window.location.origin}/afiliado/${file}`;
+
+    // Atualiza meta tag og:image para WhatsApp/Facebook pré-visualizarem a imagem
+    document.querySelector('meta[property="og:image"]').setAttribute('content', mediaUrl);
 
     const img = document.getElementById('mediaImg');
     const video = document.getElementById('mediaVideo');
-    const promoLink = document.getElementById('promoLink');
 
-    promoLink.href = link;
-    promoLink.textContent = link;
-
-    if (['mp4'].includes(fileExt)) {
-      img.style.display = 'none';
-      video.src = `/afiliado/${file}`;
+    if (fileExt === 'mp4') {
+      video.src = mediaUrl;
       video.style.display = 'block';
     } else {
-      img.src = `/afiliado/${file}`;
+      img.src = mediaUrl;
       img.style.display = 'block';
-      video.style.display = 'none';
     }
   </script>
 </body>
