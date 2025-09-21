@@ -36,6 +36,7 @@
             const mediaCard = document.createElement('div');
             mediaCard.className = 'bg-white p-4 rounded-2xl shadow-lg flex flex-col items-center';
 
+            // Elemento de mídia
             let mediaElement;
             if (['jpg', 'jpeg', 'png', 'gif'].includes(fileType)) {
               mediaElement = document.createElement('img');
@@ -51,37 +52,39 @@
 
             mediaCard.appendChild(mediaElement);
 
-            // Campo de link de promotor
+            // Campo do link de promotor
             const inputLink = document.createElement('input');
             inputLink.type = 'text';
             inputLink.placeholder = 'Coloque seu link de promotor aqui';
             inputLink.className = 'border p-2 rounded w-full mb-2';
             mediaCard.appendChild(inputLink);
 
-            // Botão compartilhar no WhatsApp
+            // Botão de download
+            const downloadBtn = document.createElement('a');
+            downloadBtn.href = fileUrl;
+            downloadBtn.download = file.name;
+            downloadBtn.textContent = 'Baixar Mídia';
+            downloadBtn.className = 'bg-gray-600 text-white px-4 py-2 rounded shadow hover:bg-gray-700 transition w-full mb-2 text-center';
+            mediaCard.appendChild(downloadBtn);
+
+            // Botão compartilhar WhatsApp
             const shareBtn = document.createElement('button');
             shareBtn.textContent = 'Compartilhar no WhatsApp';
-            shareBtn.className = 'bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700 transition w-full mb-2';
+            shareBtn.className = 'bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700 transition w-full';
             shareBtn.addEventListener('click', () => {
               const link = inputLink.value.trim();
               if (!link) {
                 alert('Por favor, coloque seu link de promotor!');
                 return;
               }
-              // WhatsApp aceita URL de mídia, e ela será visualizável no chat
-              const shareText = `Confira esta mídia:\n${fileUrl}\nMeu link de promotor: ${link}`;
-              const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
-              window.open(whatsappUrl, '_blank');
+              // Texto amigável mostrando só o nome do arquivo, mas WhatsApp precisa da URL real para preview
+              const displayName = file.name;
+              const whatsappText = `Confira esta mídia: ${displayName}\nMeu link de promotor: ${link}`;
+              const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(whatsappText)}&source=&data=`;
+              // Abrindo WhatsApp Web ou App
+              window.open(`https://wa.me/?text=${encodeURIComponent(`Confira esta mídia: ${fileUrl}\nMeu link de promotor: ${link}`)}`, '_blank');
             });
             mediaCard.appendChild(shareBtn);
-
-            // Botão de download
-            const downloadBtn = document.createElement('a');
-            downloadBtn.href = fileUrl;
-            downloadBtn.download = file.name;
-            downloadBtn.textContent = 'Baixar Mídia';
-            downloadBtn.className = 'bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700 transition w-full text-center';
-            mediaCard.appendChild(downloadBtn);
 
             mediaGallery.appendChild(mediaCard);
           }
