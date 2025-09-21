@@ -8,34 +8,41 @@
   <meta property="og:image" content="" id="ogImage">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Preview da Mídia</title>
+
+  <style>
+    body { text-align:center; padding:50px; font-family:sans-serif; }
+    img, video { max-width:90%; margin-top:20px; border-radius:12px; }
+  </style>
 </head>
-<body style="text-align:center;padding:50px;font-family:sans-serif;">
+<body>
   <h1>Confira esta mídia!</h1>
-  <div style="margin-top:20px;">
-    <img id="mediaImg" src="" alt="Mídia" style="max-width:90%;display:none;">
-    <video id="mediaVideo" controls style="max-width:90%;display:none;"></video>
-  </div>
+  <div id="mediaContainer"></div>
 
   <script>
     const urlParams = new URLSearchParams(window.location.search);
     const file = urlParams.get('file');
-    if (!file) { document.body.innerHTML = "<p>Arquivo não encontrado.</p>"; }
+    if (!file) {
+      document.body.innerHTML = "<p>Arquivo não encontrado.</p>";
+      throw new Error("Arquivo não encontrado");
+    }
 
-    const fileExt = file.split('.').pop().toLowerCase();
-    const mediaUrl = `${window.location.origin}/afiliado/${file}`;
+    // Link direto da mídia no GitHub
+    const mediaUrl = `https://raw.githubusercontent.com/SEU_USUARIO/SEU_REPOSITORIO/main/afiliado/${file}`;
 
-    // Atualiza meta tag og:image para WhatsApp/Facebook pré-visualizarem a imagem
+    // Define meta tag og:image (algumas redes podem não ler JS, mas WhatsApp geralmente lê na primeira request do servidor)
     document.querySelector('meta[property="og:image"]').setAttribute('content', mediaUrl);
 
-    const img = document.getElementById('mediaImg');
-    const video = document.getElementById('mediaVideo');
+    const container = document.getElementById('mediaContainer');
 
-    if (fileExt === 'mp4') {
+    if (file.endsWith(".mp4")) {
+      const video = document.createElement('video');
       video.src = mediaUrl;
-      video.style.display = 'block';
+      video.controls = true;
+      container.appendChild(video);
     } else {
+      const img = document.createElement('img');
       img.src = mediaUrl;
-      img.style.display = 'block';
+      container.appendChild(img);
     }
   </script>
 </body>
