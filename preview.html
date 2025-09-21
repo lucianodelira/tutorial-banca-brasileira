@@ -31,8 +31,7 @@
     // URL pública do seu site
     const mediaUrl = `https://tutorial.bancabrasileira.net/afiliado/${file}`;
 
-    // ATENÇÃO: Meta tags precisam estar no HTML inicial para WhatsApp
-    // Então a linha abaixo funciona só para atualização de visualização no navegador, mas o WhatsApp vai ler cache do servidor
+    // Atualiza meta tag para visualização no navegador (WhatsApp lê OG estático)
     document.querySelector('meta[property="og:image"]').setAttribute('content', mediaUrl);
 
     const container = document.getElementById('mediaContainer');
