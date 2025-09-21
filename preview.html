@@ -5,7 +5,10 @@
   <meta property="og:type" content="website">
   <meta property="og:title" content="Confira esta mídia!">
   <meta property="og:description" content="Compartilhe esta mídia com seu link de promotor.">
-  <meta property="og:image" content="" id="ogImage">
+  
+  <!-- Substitua NOME_DA_IMAGEM.jpg pela mídia que deseja compartilhar -->
+  <meta property="og:image" content="https://lucianodelira.github.io/tutorial-banca-brasileira/afiliado/NOME_DA_IMAGEM.jpg">
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Preview da Mídia</title>
 
@@ -16,34 +19,12 @@
 </head>
 <body>
   <h1>Confira esta mídia!</h1>
-  <div id="mediaContainer"></div>
+  
+  <!-- Substitua NOME_DA_IMAGEM.jpg pela mídia que deseja mostrar -->
+  <img src="https://lucianodelira.github.io/tutorial-banca-brasileira/afiliado/NOME_DA_IMAGEM.jpg" alt="Mídia">
 
-  <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const file = urlParams.get('file');
-    if (!file) {
-      document.body.innerHTML = "<p>Arquivo não encontrado.</p>";
-      throw new Error("Arquivo não encontrado");
-    }
-
-    // Link direto da mídia no GitHub
-    const mediaUrl = `https://raw.githubusercontent.com/SEU_USUARIO/SEU_REPOSITORIO/main/afiliado/${file}`;
-
-    // Define meta tag og:image (algumas redes podem não ler JS, mas WhatsApp geralmente lê na primeira request do servidor)
-    document.querySelector('meta[property="og:image"]').setAttribute('content', mediaUrl);
-
-    const container = document.getElementById('mediaContainer');
-
-    if (file.endsWith(".mp4")) {
-      const video = document.createElement('video');
-      video.src = mediaUrl;
-      video.controls = true;
-      container.appendChild(video);
-    } else {
-      const img = document.createElement('img');
-      img.src = mediaUrl;
-      container.appendChild(img);
-    }
-  </script>
+  <!-- Se for vídeo, use assim:
+  <video src="https://lucianodelira.github.io/tutorial-banca-brasileira/afiliado/NOME_DO_VIDEO.mp4" controls></video>
+  -->
 </body>
 </html>
