@@ -20,78 +20,73 @@
   <script>
     const mediaGallery = document.getElementById('mediaGallery');
 
-    // Configurações do GitHub
-    const GITHUB_USER = 'lucianodelira';
-    const GITHUB_REPO = 'tutorial-banca-brasileira';
-    const GITHUB_FOLDER = 'afiliado';
+    // Lista de arquivos adicionados na pasta afiliado
+    const mediaFiles = [
+      "link.png",
+      "video.mp4"
+      // Adicione mais arquivos aqui
+    ];
 
-    // Busca arquivos da pasta afiliado via GitHub API
-    fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${GITHUB_FOLDER}`)
-      .then(res => res.json())
-      .then(files => {
-        files.forEach(file => {
-          const fileName = file.name;
-          const fileUrl = file.download_url;
+    // URL pública do seu site
+    const mediaBaseUrl = "https://tutorial.bancabrasileira.net/afiliado/";
 
-          const mediaCard = document.createElement('div');
-          mediaCard.className = 'bg-white p-4 rounded-2xl shadow-lg flex flex-col items-center';
+    mediaFiles.forEach(fileName => {
+      const fileUrl = mediaBaseUrl + fileName;
 
-          let mediaElement;
-          if (fileName.endsWith(".mp4")) {
-            mediaElement = document.createElement('video');
-            mediaElement.src = fileUrl;
-            mediaElement.controls = true;
-            mediaElement.className = 'rounded-lg max-w-full mb-4';
-          } else {
-            mediaElement = document.createElement('img');
-            mediaElement.src = fileUrl;
-            mediaElement.alt = "Imagem";
-            mediaElement.className = 'rounded-lg max-w-full mb-4';
-          }
-          mediaCard.appendChild(mediaElement);
+      const mediaCard = document.createElement('div');
+      mediaCard.className = 'bg-white p-4 rounded-2xl shadow-lg flex flex-col items-center';
 
-          const inputLink = document.createElement('input');
-          inputLink.type = 'text';
-          inputLink.placeholder = 'Coloque seu link de promotor aqui';
-          inputLink.className = 'border p-2 rounded w-full mb-2';
-          mediaCard.appendChild(inputLink);
+      let mediaElement;
+      if (fileName.endsWith(".mp4")) {
+        mediaElement = document.createElement('video');
+        mediaElement.src = fileUrl;
+        mediaElement.controls = true;
+        mediaElement.className = 'rounded-lg max-w-full mb-4';
+      } else {
+        mediaElement = document.createElement('img');
+        mediaElement.src = fileUrl;
+        mediaElement.alt = "Imagem";
+        mediaElement.className = 'rounded-lg max-w-full mb-4';
+      }
+      mediaCard.appendChild(mediaElement);
 
-          const btnContainer = document.createElement('div');
-          btnContainer.className = "flex gap-2 w-full";
+      const inputLink = document.createElement('input');
+      inputLink.type = 'text';
+      inputLink.placeholder = 'Coloque seu link de promotor aqui';
+      inputLink.className = 'border p-2 rounded w-full mb-2';
+      mediaCard.appendChild(inputLink);
 
-          // Botão compartilhar
-          const shareBtn = document.createElement('button');
-          shareBtn.textContent = "Compartilhar no WhatsApp";
-          shareBtn.className = 'bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700 transition flex-1';
-          shareBtn.addEventListener('click', () => {
-            const link = inputLink.value.trim();
-            if (!link) { alert('Coloque seu link de promotor!'); return; }
+      const btnContainer = document.createElement('div');
+      btnContainer.className = "flex gap-2 w-full";
 
-            // Link direto da mídia para WhatsApp
-            const message = `Confira esta mídia: ${fileUrl}\n\nMeu link de promotor: ${link}`;
-            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
-            window.open(whatsappUrl, '_blank');
-          });
+      // Botão compartilhar no WhatsApp
+      const shareBtn = document.createElement('button');
+      shareBtn.textContent = "Compartilhar no WhatsApp";
+      shareBtn.className = 'bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700 transition flex-1';
+      shareBtn.addEventListener('click', () => {
+        const link = inputLink.value.trim();
+        if (!link) { alert('Coloque seu link de promotor!'); return; }
 
-          // Botão download
-          const downloadBtn = document.createElement('a');
-          downloadBtn.textContent = "Baixar";
-          downloadBtn.href = fileUrl;
-          downloadBtn.download = fileName;
-          downloadBtn.className = 'bg-gray-600 text-white px-4 py-2 rounded shadow hover:bg-gray-700 transition flex-1 text-center';
-
-          btnContainer.appendChild(shareBtn);
-          btnContainer.appendChild(downloadBtn);
-          mediaCard.appendChild(btnContainer);
-
-          mediaGallery.appendChild(mediaCard);
-        });
-      })
-      .catch(err => {
-        mediaGallery.innerHTML = "<p>Erro ao carregar mídias.</p>";
-        console.error(err);
+        // Link público do seu site, compatível com WhatsApp
+        const message = `Confira esta mídia: ${fileUrl}\n\nMeu link de promotor: ${link}`;
+        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+        window.open(whatsappUrl, '_blank');
       });
+
+      // Botão download
+      const downloadBtn = document.createElement('a');
+      downloadBtn.textContent = "Baixar";
+      downloadBtn.href = fileUrl;
+      downloadBtn.download = fileName;
+      downloadBtn.className = 'bg-gray-600 text-white px-4 py-2 rounded shadow hover:bg-gray-700 transition flex-1 text-center';
+
+      btnContainer.appendChild(shareBtn);
+      btnContainer.appendChild(downloadBtn);
+      mediaCard.appendChild(btnContainer);
+
+      mediaGallery.appendChild(mediaCard);
+    });
   </script>
+
 </body>
 </html>
-
