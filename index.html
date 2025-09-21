@@ -20,13 +20,11 @@
   <script>
     const mediaGallery = document.getElementById('mediaGallery');
 
-    // Configurações do GitHub (usadas apenas para listar os arquivos)
     const GITHUB_USER = 'lucianodelira';
     const GITHUB_REPO = 'tutorial-banca-brasileira';
     const GITHUB_FOLDER = 'afiliado';
 
-    // URL pública do seu site
-    const PUBLIC_BASE_URL = 'https://tutorial.bancabrasileira.net/afiliado/';
+    const PUBLIC_PREVIEW_BASE = 'https://tutorial.bancabrasileira.net/preview.html?file=';
 
     // Busca arquivos da pasta afiliado via GitHub API
     fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${GITHUB_FOLDER}`)
@@ -34,7 +32,7 @@
       .then(files => {
         files.forEach(file => {
           const fileName = file.name;
-          const publicFileUrl = `${PUBLIC_BASE_URL}${fileName}`; // Usando domínio público
+          const publicFileUrl = `https://tutorial.bancabrasileira.net/afiliado/${fileName}`;
 
           const mediaCard = document.createElement('div');
           mediaCard.className = 'bg-white p-4 rounded-2xl shadow-lg flex flex-col items-center';
@@ -42,12 +40,12 @@
           let mediaElement;
           if (fileName.endsWith(".mp4")) {
             mediaElement = document.createElement('video');
-            mediaElement.src = publicFileUrl; // Exibe vídeo pelo domínio público
+            mediaElement.src = publicFileUrl;
             mediaElement.controls = true;
             mediaElement.className = 'rounded-lg max-w-full mb-4';
           } else {
             mediaElement = document.createElement('img');
-            mediaElement.src = publicFileUrl; // Exibe imagem pelo domínio público
+            mediaElement.src = publicFileUrl;
             mediaElement.alt = "Imagem";
             mediaElement.className = 'rounded-lg max-w-full mb-4';
           }
@@ -62,7 +60,7 @@
           const btnContainer = document.createElement('div');
           btnContainer.className = "flex gap-2 w-full";
 
-          // Botão compartilhar no WhatsApp
+          // Botão compartilhar no WhatsApp via preview.html
           const shareBtn = document.createElement('button');
           shareBtn.textContent = "Compartilhar no WhatsApp";
           shareBtn.className = 'bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700 transition flex-1';
@@ -70,7 +68,9 @@
             const link = inputLink.value.trim();
             if (!link) { alert('Coloque seu link de promotor!'); return; }
 
-            const message = `Confira esta mídia: ${publicFileUrl}\n\nMeu link de promotor: ${link}`;
+            // Link para preview.html que garante preview no WhatsApp
+            const previewLink = `${PUBLIC_PREVIEW_BASE}${fileName}`;
+            const message = `Confira esta mídia: ${previewLink}\n\nMeu link de promotor: ${link}`;
             const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
             window.open(whatsappUrl, '_blank');
           });
